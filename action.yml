@@ -127,7 +127,7 @@ inputs:
   # Some templates may not support this option
   optimize:
     description: SVG optimization
-    default: yes
+    default: css, xml
   
   # Setup additional templates from remote repositories
   setup_community_templates:
@@ -220,6 +220,16 @@ inputs:
     description: Time to wait (in seconds) before each retry
     default: 300
   
+  # Number of retries in case output action fail
+  retries_output_action:
+    description: Number of retries (output action)
+    default: 5
+  
+  # Time to wait (in seconds) before each retry (output action)
+  retries_delay_output_action:
+    description: Time to wait (in seconds) before each retry (output action)
+    default: 120
+  
   # Throw on plugins errors
   # If disabled, metrics will handle errors gracefully with a message in rendered metrics
   plugins_errors_fatal:
@@ -249,6 +259,7 @@ inputs:
     default: no
   
   # Experimental features
+  # Note that no backward compatibility are guaranteed for these features
   experimental_features:
     description: Experimental features
     default: ""
@@ -757,6 +768,11 @@ inputs:
     description: Repositories to skip
     default: ""
   
+  # Ignored actors (useful to ignore bots users)
+  plugin_activity_ignored:
+    description: Actors to ignore
+    default: github-actions[bot], dependabot[bot], dependabot-preview[bot]
+  
   # ====================================================================================
   # 🏆 Achievements
   
@@ -866,6 +882,11 @@ inputs:
   plugin_traffic:
     description: Display repositories traffic metrics
     default: no
+  
+  # List of repositories that will be skipped
+  plugin_traffic_skipped:
+    description: Repositories to skip
+    default: ""
   
   # ====================================================================================
   # 📓 Repositories
@@ -998,6 +1019,7 @@ inputs:
   # - "apple"   : not required
   # - "spotify" : required for "recent" or "top" mode, format is "client_id, client_secret, refresh_token"
   # - "lastfm"  : required, format is "api_key"
+  # - "youtube" : required for "recent" mode, format is "cookie"
   plugin_music_token:
     description: Music provider personal token
     default: ""
@@ -1270,34 +1292,6 @@ inputs:
     default: 5m
   
   # ====================================================================================
-  # 📸 Website screenshot
-  
-  # Enable or disable plugin
-  plugin_screenshot:
-    description: Display a screenshot of any website
-    default: no
-  
-  # Screenshot title caption
-  plugin_screenshot_title:
-    description: Screenshot title caption
-    default: Screenshot
-  
-  # Website to take screenshot
-  plugin_screenshot_url:
-    description: Website to take screenshot
-    default: ""
-  
-  # Selector to take in screenshot
-  plugin_screenshot_selector:
-    description: Selector to take in screenshot
-    default: body
-  
-  # Display or remove default page background
-  plugin_screenshot_background:
-    description: Display or remove default page background
-    default: yes
-  
-  # ====================================================================================
   # 💉 Nightscout
   
   # Enable or disable plugin
@@ -1334,6 +1328,52 @@ inputs:
   plugin_nightscout_urgenthighalert:
     description: When the blood sugar is considered urgently high
     default: 250
+  
+  # ====================================================================================
+  # 💩 PoopMap plugin
+  
+  # Enable or disable plugin
+  plugin_poopmap:
+    description: Display PoopMap stats
+    default: no
+  
+  # PoopMap API token
+  plugin_poopmap_token:
+    description: PoopMap API token
+    default: ""
+  
+  # Time range to use for displayed stats
+  plugin_poopmap_days:
+    description: PoopMap time range
+    default: 7
+  
+  # ====================================================================================
+  # 📸 Website screenshot
+  
+  # Enable or disable plugin
+  plugin_screenshot:
+    description: Display a screenshot of any website
+    default: no
+  
+  # Screenshot title caption
+  plugin_screenshot_title:
+    description: Screenshot title caption
+    default: Screenshot
+  
+  # Website to take screenshot
+  plugin_screenshot_url:
+    description: Website to take screenshot
+    default: ""
+  
+  # Selector to take in screenshot
+  plugin_screenshot_selector:
+    description: Selector to take in screenshot
+    default: body
+  
+  # Display or remove default page background
+  plugin_screenshot_background:
+    description: Display or remove default page background
+    default: yes
   
 
 # ====================================================================================
